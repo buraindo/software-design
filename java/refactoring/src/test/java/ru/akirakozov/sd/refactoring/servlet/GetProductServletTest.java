@@ -31,7 +31,7 @@ public class GetProductServletTest {
     }
 
     @Test
-    public void testGetNoError() throws SQLException, IOException {
+    public void testGetNoError() throws SQLException {
         try (final var connection = DriverManager.getConnection(DB_ADDRESS)) {
             final var query = """
                     insert into product(name, price) values
@@ -52,7 +52,7 @@ public class GetProductServletTest {
     }
 
     @Test
-    public void testGetEmptyDatabaseNoError() throws IOException {
+    public void testGetEmptyDatabaseNoError() {
         getProductsServlet.doGet(request, response);
         assertEquals("""
                 <html><body>

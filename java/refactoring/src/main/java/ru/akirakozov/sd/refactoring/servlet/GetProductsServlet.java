@@ -1,38 +1,40 @@
 package ru.akirakozov.sd.refactoring.servlet;
 
+import ru.akirakozov.sd.refactoring.db.EntityManager;
+import ru.akirakozov.sd.refactoring.utils.ThrowingConsumer;
+
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
 
 /**
  * @author akirakozov
  */
 public class GetProductsServlet extends HttpServlet {
+    private final EntityManager entityManager;
+
+    private static final String DB_ADDRESS = "jdbc:sqlite:test.db";
+
+    public GetProductsServlet() {
+        this.entityManager = new EntityManager(DB_ADDRESS);
+    }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) {
         try {
-            try (Connection c = DriverManager.getConnection("jdbc:sqlite:test.db")) {
-                Statement stmt = c.createStatement();
-                ResultSet rs = stmt.executeQuery("SELECT * FROM PRODUCT");
-                response.getWriter().println("<html><body>");
+            entityManager.execute("SELECT * FROM PRODUCT", ThrowingConsumer.unchecked(resultSet -> {
+                final var writer = response.getWriter();
+                writer.println("<html><body>");
 
-                while (rs.next()) {
-                    String  name = rs.getString("name");
-                    long price  = rs.getLong("price");
-                    response.getWriter().println(name + "\t" + price + "</br>");
+                while (resultSet.next()) {
+                    String name = resultSet.getString("name");
+                    long price = resultSet.getLong("price");
+                    writer.println(name + "\t" + price + "</br>");
                 }
-                response.getWriter().println("</body></html>");
+                writer.println("</body></html>");
 
-                rs.close();
-                stmt.close();
-            }
-
+                resultSet.close();
+            }));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
