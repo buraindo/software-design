@@ -2,6 +2,7 @@ package ru.akirakozov.sd.refactoring.servlet;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import ru.akirakozov.sd.refactoring.common.TestUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -27,21 +28,7 @@ public class QueryServletTest {
     @BeforeEach
     public void setup() throws IOException, SQLException {
         when(response.getWriter()).thenReturn(new PrintWriter(writer));
-        try (final var connection = DriverManager.getConnection(DB_ADDRESS)) {
-            final var query = "drop table if exists product";
-            connection.prepareStatement(query).execute();
-        }
-
-        try (final var connection = DriverManager.getConnection(DB_ADDRESS)) {
-            final var query = """
-                    create table if not exists product(
-                        id integer primary key autoincrement not null,
-                        name text not null,
-                        price int not null
-                    )
-                    """;
-            connection.prepareStatement(query).execute();
-        }
+        TestUtils.clearProductTable(DB_ADDRESS);
     }
 
     @Test
