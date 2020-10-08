@@ -6,6 +6,7 @@ import ru.akirakozov.sd.refactoring.utils.ThrowingConsumer;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.sql.SQLException;
 
 /**
  * @author akirakozov
@@ -35,7 +36,7 @@ public class GetProductsServlet extends HttpServlet {
 
                 resultSet.close();
             }));
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
 
