@@ -73,21 +73,4 @@ public class GetProductServletTest {
                 """, writer.toString());
     }
 
-    @Test
-    public void testGetIntPriceOverflow() throws SQLException, IOException {
-        try (final var connection = DriverManager.getConnection(DB_ADDRESS)) {
-            final var query = """
-                    insert into product(name, price) values
-                        ('test', '100000000000')
-                    """;
-            connection.prepareStatement(query).execute();
-        }
-        getProductsServlet.doGet(request, response);
-        assertEquals("""
-                <html><body>
-                test	1215752192</br>
-                </body></html>
-                """, writer.toString());
-    }
-
 }
