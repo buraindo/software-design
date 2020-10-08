@@ -3,13 +3,13 @@ package ru.akirakozov.sd.refactoring.servlet;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.akirakozov.sd.refactoring.common.TestUtils;
+import ru.akirakozov.sd.refactoring.db.EntityManager;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -22,6 +22,7 @@ public class QueryServletTest {
     private final HttpServletResponse response = mock(HttpServletResponse.class);
     private final StringWriter writer = new StringWriter();
     private final QueryServlet queryServlet = new QueryServlet();
+    private final EntityManager entityManager = new EntityManager(DB_ADDRESS);
 
     private static final String DB_ADDRESS = "jdbc:sqlite:test.db";
 
@@ -34,15 +35,13 @@ public class QueryServletTest {
     @Test
     public void testMaxNoError() throws IOException, SQLException {
         when(request.getParameter("command")).thenReturn("max");
-        try (final var connection = DriverManager.getConnection(DB_ADDRESS)) {
-            final var query = """
-                    insert into product(name, price) values
-                        ('test', '42'),
-                        ('hello', '24'),
-                        ('name', '-11')
-                    """;
-            connection.prepareStatement(query).execute();
-        }
+        final var query = """
+                insert into product(name, price) values
+                    ('test', '42'),
+                    ('hello', '24'),
+                    ('name', '-11')
+                """;
+        entityManager.execute(query);
         queryServlet.doGet(request, response);
         assertEquals("""
                 <html><body>
@@ -66,15 +65,13 @@ public class QueryServletTest {
     @Test
     public void testMinNoError() throws IOException, SQLException {
         when(request.getParameter("command")).thenReturn("min");
-        try (final var connection = DriverManager.getConnection(DB_ADDRESS)) {
-            final var query = """
-                    insert into product(name, price) values
-                        ('test', '42'),
-                        ('hello', '24'),
-                        ('name', '-11')
-                    """;
-            connection.prepareStatement(query).execute();
-        }
+        final var query = """
+                insert into product(name, price) values
+                    ('test', '42'),
+                    ('hello', '24'),
+                    ('name', '-11')
+                """;
+        entityManager.execute(query);
         queryServlet.doGet(request, response);
         assertEquals("""
                 <html><body>
@@ -98,15 +95,13 @@ public class QueryServletTest {
     @Test
     public void testSumNoError() throws IOException, SQLException {
         when(request.getParameter("command")).thenReturn("sum");
-        try (final var connection = DriverManager.getConnection(DB_ADDRESS)) {
-            final var query = """
-                    insert into product(name, price) values
-                        ('test', '42'),
-                        ('hello', '24'),
-                        ('name', '-11')
-                    """;
-            connection.prepareStatement(query).execute();
-        }
+        final var query = """
+                insert into product(name, price) values
+                    ('test', '42'),
+                    ('hello', '24'),
+                    ('name', '-11')
+                """;
+        entityManager.execute(query);
         queryServlet.doGet(request, response);
         assertEquals("""
                 <html><body>
@@ -131,15 +126,13 @@ public class QueryServletTest {
     @Test
     public void testCountNoError() throws IOException, SQLException {
         when(request.getParameter("command")).thenReturn("count");
-        try (final var connection = DriverManager.getConnection(DB_ADDRESS)) {
-            final var query = """
-                    insert into product(name, price) values
-                        ('test', '42'),
-                        ('hello', '24'),
-                        ('name', '-11')
-                    """;
-            connection.prepareStatement(query).execute();
-        }
+        final var query = """
+                insert into product(name, price) values
+                    ('test', '42'),
+                    ('hello', '24'),
+                    ('name', '-11')
+                """;
+        entityManager.execute(query);
         queryServlet.doGet(request, response);
         assertEquals("""
                 <html><body>
