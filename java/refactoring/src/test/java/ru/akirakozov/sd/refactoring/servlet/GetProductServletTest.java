@@ -3,7 +3,9 @@ package ru.akirakozov.sd.refactoring.servlet;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.akirakozov.sd.refactoring.common.TestUtils;
-import ru.akirakozov.sd.refactoring.db.EntityManager;
+import ru.akirakozov.sd.refactoring.db.Dao;
+import ru.akirakozov.sd.refactoring.db.ProductDao;
+import ru.akirakozov.sd.refactoring.model.Product;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,7 +23,7 @@ public class GetProductServletTest {
     private final HttpServletResponse response = mock(HttpServletResponse.class);
     private final StringWriter writer = new StringWriter();
     private final GetProductsServlet getProductsServlet = new GetProductsServlet();
-    private final EntityManager entityManager = new EntityManager(DB_ADDRESS);
+    private final Dao<Product> productDao = new ProductDao();
 
     private static final String DB_ADDRESS = "jdbc:sqlite:test.db";
 
@@ -32,14 +34,10 @@ public class GetProductServletTest {
     }
 
     @Test
-    public void testGetNoError() throws SQLException {
-        final var query = """
-                insert into product(name, price) values
-                    ('test', '42'),
-                    ('hello', '24'),
-                    ('name', '-11')
-                """;
-        entityManager.execute(query);
+    public void testGetNoError() {
+        productDao.save(new Product("test", 42L));
+        productDao.save(new Product("hello", 24L));
+        productDao.save(new Product("name", -11L));
         getProductsServlet.doGet(request, response);
         assertEquals("""
                 <html><body>

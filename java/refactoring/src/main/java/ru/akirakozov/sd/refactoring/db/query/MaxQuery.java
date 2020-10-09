@@ -1,13 +1,16 @@
 package ru.akirakozov.sd.refactoring.db.query;
 
+import ru.akirakozov.sd.refactoring.model.Product;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Optional;
 
-public class MaxQuery implements Query<Long> {
+public class MaxQuery implements Query<Optional<Product>> {
     @Override
-    public Long getResult(final ResultSet resultSet) {
+    public Optional<Product> getResult(final ResultSet resultSet) {
         try {
-            return resultSet.next() ? resultSet.getLong(1) : 0;
+            return Optional.ofNullable(resultSet.next() ? Product.fromResultSet(resultSet) : null);
         } catch (final SQLException e) {
             throw new RuntimeException(e);
         }

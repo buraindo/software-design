@@ -2,12 +2,13 @@ package ru.akirakozov.sd.refactoring.db.query;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Optional;
 
-public class SumQuery implements Query<Long> {
+public class SumQuery implements Query<Optional<Long>> {
     @Override
-    public Long getResult(final ResultSet resultSet) {
+    public Optional<Long> getResult(final ResultSet resultSet) {
         try {
-            return resultSet.next() ? resultSet.getLong(1) : 0;
+            return Optional.ofNullable(resultSet.next() ? resultSet.getLong(1) : null);
         } catch (final SQLException e) {
             throw new RuntimeException(e);
         }

@@ -19,12 +19,7 @@ public class ProductDao implements Dao<Product> {
         try {
             entityManager.execute("select * from product", ThrowingConsumer.unchecked(resultSet -> {
                 while (resultSet.next()) {
-                    final var product = new Product() {{
-                        setId(resultSet.getLong("id"));
-                        setName(resultSet.getString("name"));
-                        setPrice(resultSet.getLong("price"));
-                    }};
-                    result.add(product);
+                    result.add(Product.fromResultSet(resultSet));
                 }
             }));
             return result;
