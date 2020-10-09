@@ -35,7 +35,7 @@ public class QueryServletTest {
     }
 
     @Test
-    public void testMaxNoError() throws IOException {
+    public void testMaxNoError() {
         when(request.getParameter("command")).thenReturn("max");
         productDao.save(new Product("test", 42L));
         productDao.save(new Product("hello", 24L));
@@ -50,7 +50,7 @@ public class QueryServletTest {
     }
 
     @Test
-    public void testMaxEmptyDatabase() throws IOException {
+    public void testMaxEmptyDatabase() {
         when(request.getParameter("command")).thenReturn("max");
         queryServlet.doGet(request, response);
         assertEquals("""
@@ -61,7 +61,7 @@ public class QueryServletTest {
     }
 
     @Test
-    public void testMinNoError() throws IOException {
+    public void testMinNoError() {
         when(request.getParameter("command")).thenReturn("min");
         productDao.save(new Product("test", 42L));
         productDao.save(new Product("hello", 24L));
@@ -76,7 +76,7 @@ public class QueryServletTest {
     }
 
     @Test
-    public void testMinEmptyDatabase() throws IOException {
+    public void testMinEmptyDatabase() {
         when(request.getParameter("command")).thenReturn("min");
         queryServlet.doGet(request, response);
         assertEquals("""
@@ -87,7 +87,7 @@ public class QueryServletTest {
     }
 
     @Test
-    public void testSumNoError() throws IOException {
+    public void testSumNoError() {
         when(request.getParameter("command")).thenReturn("sum");
         productDao.save(new Product("test", 42L));
         productDao.save(new Product("hello", 24L));
@@ -102,7 +102,7 @@ public class QueryServletTest {
     }
 
     @Test
-    public void testSumEmptyDatabase() throws IOException {
+    public void testSumEmptyDatabase() {
         when(request.getParameter("command")).thenReturn("sum");
         queryServlet.doGet(request, response);
         assertEquals("""
@@ -114,7 +114,7 @@ public class QueryServletTest {
     }
 
     @Test
-    public void testCountNoError() throws IOException {
+    public void testCountNoError() {
         when(request.getParameter("command")).thenReturn("count");
         productDao.save(new Product("test", 42L));
         productDao.save(new Product("hello", 24L));
@@ -129,7 +129,7 @@ public class QueryServletTest {
     }
 
     @Test
-    public void testCountEmptyDatabase() throws IOException {
+    public void testCountEmptyDatabase() {
         when(request.getParameter("command")).thenReturn("count");
         queryServlet.doGet(request, response);
         assertEquals("""
@@ -141,14 +141,14 @@ public class QueryServletTest {
     }
 
     @Test
-    public void testQueryUnknownCommand() throws IOException {
+    public void testQueryUnknownCommand() {
         when(request.getParameter("command")).thenReturn("unknown");
         queryServlet.doGet(request, response);
         assertEquals("Unknown command: unknown\n", writer.toString());
     }
 
     @Test
-    public void testQueryNoCommand() throws IOException {
+    public void testQueryNoCommand() {
         queryServlet.doGet(request, response);
         assertEquals("Unknown command: null\n", writer.toString());
     }

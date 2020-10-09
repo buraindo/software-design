@@ -4,19 +4,16 @@ public class HtmlWriter {
     private final StringBuilder builder = new StringBuilder();
 
     public void addH1Header(final String content) {
-        addTag("h1", content);
-    }
-
-    public void addParagraph(final String content) {
-        addTag("p", content);
+        builder.append("<h1>").append(content).append("</h1>").append("\n");
     }
 
     public void addBreakLine() {
-        addSingleTag("br");
+        builder.append("</br>").append("\n");
     }
 
-    public void print(final String content) {
+    public HtmlWriter print(final String content) {
         builder.append(content);
+        return this;
     }
 
     public void println(final String content) {
@@ -25,13 +22,5 @@ public class HtmlWriter {
 
     public String toString() {
         return "<html><body>\n" + builder.toString() + "</body></html>";
-    }
-
-    private void addSingleTag(final String tag) {
-        builder.append("</").append(tag).append(">").append("\n");
-    }
-
-    private void addTag(final String tag, final String content) {
-        builder.append("<").append(tag).append(">").append(content).append("</").append(tag).append(">").append("\n");
     }
 }

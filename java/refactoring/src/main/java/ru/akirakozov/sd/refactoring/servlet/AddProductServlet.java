@@ -17,9 +17,7 @@ public class AddProductServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        final var product = new Product(request.getParameter("name"), Long.parseLong(request.getParameter("price")));
-        productDao.save(product);
-
+        productDao.save(new Product(request.getParameter("name"), Long.parseLong(request.getParameter("price"))));
         response.setContentType("text/html");
         response.setStatus(HttpServletResponse.SC_OK);
         response.getWriter().println("OK");
