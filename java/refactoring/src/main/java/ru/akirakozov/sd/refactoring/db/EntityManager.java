@@ -4,6 +4,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 public class EntityManager {
     private final String address;
@@ -24,6 +25,12 @@ public class EntityManager {
     public void execute(final String query) throws SQLException {
         try (final var connection = DriverManager.getConnection(address)) {
             connection.prepareStatement(query).execute();
+        }
+    }
+
+    public <T> T execute(final String query, final Function<ResultSet, T> mapper) throws SQLException {
+        try (final var connection = DriverManager.getConnection(address)) {
+            return mapper.apply(connection.prepareStatement(query).executeQuery());
         }
     }
 
