@@ -28,8 +28,8 @@ public class CalcVisitor implements TokenVisitor {
         if (tokens.size() < 2) {
             throw new InvalidOperatorException(token.getOperator());
         }
-        final var left = tokens.pop();
         final var right = tokens.pop();
+        final var left = tokens.pop();
         if (!(left instanceof NumberToken)) {
             throw new InvalidOperatorException(((Operation) left).getOperator());
         }
